@@ -16,7 +16,7 @@ const Addbirthday = ({ addBirthday }) => {
 
   return (
     <div className='min-h-screen flex flex-col items-center bg-gradient-to-b from-green-200 to-white p-6'>
-        <h1 className='text-3xl font-bold mb-6 text-gray-800'>➕ Add a New Birthday</h1>
+        <h1 className='text-3xl font-bold mb-6 text-gray-800'> Add a New Birthday</h1>
         <form onSubmit={handleSubmit} className='w-full max-w-md bg-white shadow-lg rounded-lg p-6'>
             <label className='block mb-2 text-gray-600 font-medium'>Name</label>
             <input 

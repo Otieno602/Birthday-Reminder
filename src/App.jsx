@@ -13,12 +13,22 @@ function App () {
   const addBirthday = (name, date) => {
     const newBirthday = { id: Date.now(), name, date};
     setBirthdays([...birthdays, newBirthday])
-  }
+  };
+
+  const editBirthday = (id, newName, newDate) => {
+    setBirthdays((prev) =>
+      prev.map((b) => (b.id === id ? {...b, name: newName, date: newDate} : b))
+    );
+  };
+
+  const deleteBirthday = (id) => {
+    setBirthdays((prev) => prev.filter((b) => b.id !== id));
+  };
 
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Home birthdays={birthdays}/>} />
+        <Route path='/' element={<Home birthdays={birthdays} editBirthday={editBirthday} deleteBirthday={deleteBirthday}/>} />
         <Route path='/add' element={<Addbirthday addBirthday={addBirthday}/>} />
       </Routes>
     </Router>
