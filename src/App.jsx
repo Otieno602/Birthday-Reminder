@@ -29,6 +29,7 @@ function App () {
       new Notification(title, {
         body: message,
         icon: <FaBirthdayCake className='text-4xl text-red-700'/>,
+        requireInteraction: true,
       });
     }
   };

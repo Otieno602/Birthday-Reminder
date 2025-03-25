@@ -62,15 +62,15 @@ const Home = ({ birthdays, editBirthday, deleteBirthday }) => {
                   value={editDate}
                   onChange={(e) => setEditDate(e.target.value)}
                   className='border p-2 rounded' />
-                  <button type='submit' className='bg-green-500 text-white px-3 py-1 rounded'> ✅ Save</button>
-                  <button type='button' onClick={() => setEditingBirthday(null)} className='text-red-500'>❌ Cancel</button>
+                  <button type='submit' className='bg-green-500 text-white px-3 py-1 rounded'>  Save</button>
+                  <button type='button' onClick={() => setEditingBirthday(null)} className='text-red-500'> Cancel</button>
               </form>
             ) : (
               <>
                <span className="font-semibold text-gray-700">{bday.name}</span>
                <span className="text-gray-500">{bday.date}</span>
-               <button onClick={() => startEditing(bday)} className='bg-blue-500 text-white px-3 py-1 rounded ml-2'>  ✏️ Edit</button>
-               <button onClick={() => handleDelete(bday.id)} className='bg-red-500 text-white px-3 py-1 rounded ml-2'> 🗑️ Delete</button>
+               <button onClick={() => startEditing(bday)} className='bg-blue-500 text-white px-3 py-1 rounded ml-2 hover:bg-blue-700 transition'>Edit</button>
+               <button onClick={() => handleDelete(bday.id)} className='bg-red-500 text-white px-3 py-1 rounded ml-2 hover:bg-red-700 transition'>Delete</button>
               </>
             )}
           </li>
@@ -79,7 +79,7 @@ const Home = ({ birthdays, editBirthday, deleteBirthday }) => {
     </ul>
 
     <Link to='/add' className="mt-6 px-5 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition">
-      ➕ Add Birthday
+       Add Birthday
     </Link>
   </div>
   );
