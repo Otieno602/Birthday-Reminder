@@ -1,9 +1,18 @@
 const express = require('express');
+const connectDB = require('./config/db');
+require('dotenv').config;
 const cors = require('cors');
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cors());
+
+// Connect to DB
+connectDB();
+
+// Middleware and routes go here
+app.use(express.json());
 
 // Temporary data storage
 let birthdays = [];
@@ -52,7 +61,6 @@ app.delete('/api/birthdays/:id', (req, res) => {
 });
 
 // Start server
-const PORT = 5000;
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`);
 });
