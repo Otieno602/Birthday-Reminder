@@ -24,6 +24,27 @@ app.post('/api/birthdays', (req, res) => {
     res.status(201).json(newBirthday);
 });
 
+// Edit birthday
+app.put('/api/birthdays/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, date } = req.body;
+
+    if (!name || !date) {
+        return res.status(400).json({ message: 'Name and date are required' });
+    }
+
+    let birthday = birthdays.find(b => b.id == id);
+        if (!birthday) {
+            return res.status(404).json({ message: 'Birthday not found' });
+        }
+
+    // Update the birthday
+    birthday.name = name;
+    birthday.date = date;
+
+    res.json(birthday);
+})
+
 // Delete a birthday
 app.delete('/api/birthdays/:id', (req, res) => {
     birthdays = birthdays.filter(b => b.id != req.params.id);
