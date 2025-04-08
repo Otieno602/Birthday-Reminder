@@ -6,14 +6,31 @@ import { addBirthday } from '../api/birthdays';
 const Addbirthday = () => {
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+
+    const validate = () => {
+        const newErrors = {};
+        if (!name.trim()) {
+            newErrors.name = 'Name is required';
+        } else if (name.trim().length < 2) {
+            newErrors.name = 'Name must be at least two characters';
+        }
+
+        if (!date) {
+            newErrors.date = 'Date is required';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if(!name || !date) return alert('Please fill all fields!');
+        if(!validate()) return;
+
         try {
-            console.log('Sending birthday:', { name, date });
-            await addBirthday({ name, date });
+            await addBirthday({ name: name.trim(), date });
             navigate('/');
         } catch (error) {
             console.error('Error adding birthday:', error);
@@ -36,6 +53,7 @@ const Addbirthday = () => {
                         onChange={(e) => setName(e.target.value)}
                         required
                     />
+                    {errors.name && <p className='text-red-500 text-sm mt-1'>{errors.name}</p>}
                 </div>
                 <div className='mb-6'>
                     <label className='block mb-2 text-gray-600 font-medium text-sm md:text-base'>Date</label>
@@ -46,6 +64,7 @@ const Addbirthday = () => {
                         onChange={(e) => setDate(e.target.value)}
                         required
                     />
+                    {errors.date && <p className='text-red-500 text-sm mt-1'>{errors.date}</p>}
                 </div>
                 <button type='submit' className='w-full p-2 md:p-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition text-sm md:text-base'>
                     Save Birthday
