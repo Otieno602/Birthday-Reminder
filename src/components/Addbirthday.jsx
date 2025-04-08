@@ -1,17 +1,24 @@
 import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { addBirthday } from '../api/birthdays';
 
-const Addbirthday = ({ addBirthday }) => {
+const Addbirthday = () => {
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if(!name || !date) return alert('Please fill all fields!');
-        addBirthday(name, date);
-        navigate('/');
+        try {
+            console.log('Sending birthday:', { name, date });
+            await addBirthday({ name, date });
+            navigate('/');
+        } catch (error) {
+            console.error('Error adding birthday:', error);
+            alert('Failed to add birthday. Try again')
+        }
     };
 
   return (

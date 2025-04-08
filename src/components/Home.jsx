@@ -1,18 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getBirthdays, editBirthday, deleteBirthday } from '../api/birthdays';
 
-const Home = ({ birthdays, editBirthday, deleteBirthday }) => { 
+function Home () {
+  const [birthdays, setBirthdays] = useState([]);
+
   const [editingBirthday, setEditingBirthday] = useState(null);
   const [editName, setEditName] = useState('');
   const [editDate, setEditDate] = useState('');
 
-  const startEditing = (bday) => {
-    setEditingBirthday(bday);
-    setEditName(bday.name);
-    setEditDate(bday.date.split('T')[0]);
-  };
 
+  // Fetch birthdays from backend
+  useEffect(() => {
+    fetchBirthdays()
+  }, []);
+  const fetchBirthdays = async () => {
+    try {
+      const res = await getBirthdays();
+      setBirthdays(res.data);
+    } catch (err) {
+      console.error('Error fetching birthdays:', err);
+    }
+  };
+  
+  // Edit existing birthday
   const handleEditSubmit = async (e, _id) => {
     e.preventDefault();
     if(!editName.trim() || !editDate.trim()) {
@@ -22,17 +34,20 @@ const Home = ({ birthdays, editBirthday, deleteBirthday }) => {
     try{
       await editBirthday(_id, editName, editDate);
       setEditingBirthday(null);
+      fetchBirthdays();
     }catch (error) {
       console.error('Error editing birthday:', error);
       alert('Failed to update the birthday. Please try again')
     }
-  };
-
+  }
+  
+  // Delete birthday
   const handleDelete = async (_id) => {
     const confirmDelete = window.confirm('Are you sure you want to delete this birthday?');
     if(!confirmDelete) return;
     try{
       await deleteBirthday(_id);
+      setBirthdays(birthdays.filter(b => b._id !== _id));
     }catch (error) {
       console.error('Error deleting birthday:', error);
       alert('Failed to delete the birthday. Please try again');
@@ -78,7 +93,11 @@ const Home = ({ birthdays, editBirthday, deleteBirthday }) => {
                     <span className="text-gray-500 text-sm sm:text-base">{new Date (bday.date).toLocaleDateString()}</span>
                   </div>
                   <div className='flex gap-2 mt-2 sm:mt-0 self-end sm:self-auto'>
-                    <button onClick={() => startEditing(bday)} className='bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition text-sm sm:text-base'>Edit</button>
+                    <button onClick={() => {
+                      setEditingBirthday(bday);
+                      setEditName(bday.name);
+                      setEditDate(bday.date);
+                    }} className='bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-700 transition text-sm sm:text-base'>Edit</button>
                     <button onClick={() => handleDelete(bday._id)} className='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700 transition text-sm sm:text-base'>Delete</button>
                   </div>
                 </div>
