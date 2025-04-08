@@ -7,6 +7,7 @@ const Addbirthday = () => {
     const [name, setName] = useState('');
     const [date, setDate] = useState('');
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const validate = () => {
@@ -29,12 +30,15 @@ const Addbirthday = () => {
         e.preventDefault();
         if(!validate()) return;
 
+        setLoading(true);
         try {
             await addBirthday({ name: name.trim(), date });
             navigate('/');
         } catch (error) {
             console.error('Error adding birthday:', error);
             alert('Failed to add birthday. Try again')
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -66,8 +70,10 @@ const Addbirthday = () => {
                     />
                     {errors.date && <p className='text-red-500 text-sm mt-1'>{errors.date}</p>}
                 </div>
-                <button type='submit' className='w-full p-2 md:p-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition text-sm md:text-base'>
-                    Save Birthday
+                <button type='submit'
+                        disabled = { loading } 
+                        className = {`w-full p-2 md:p-3 rounded-lg shadow-md text-sm md:text-base transition ${ loading ? 'bg-green-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700 text-white'}`}>
+                    { loading ? 'Saving...' : 'Save Birthday' }
                 </button>
             </form>
         </div>
