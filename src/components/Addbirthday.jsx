@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addBirthday } from '../api/birthdays';
+import { toast } from 'react-toastify';
 
 const Addbirthday = () => {
     const [name, setName] = useState('');
@@ -33,10 +34,11 @@ const Addbirthday = () => {
         setLoading(true);
         try {
             await addBirthday({ name: name.trim(), date });
+            toast.success('Birthday added successfully! 🎉');
             navigate('/');
         } catch (error) {
             console.error('Error adding birthday:', error);
-            alert('Failed to add birthday. Try again')
+            toast.error('Failed to add birthday. Please try again!')
         } finally {
             setLoading(false);
         }

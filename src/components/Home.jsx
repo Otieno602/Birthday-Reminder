@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getBirthdays, editBirthday, deleteBirthday } from '../api/birthdays';
+import { toast } from 'react-toastify';
 
 function Home () {
   const [birthdays, setBirthdays] = useState([]);
@@ -28,18 +29,19 @@ function Home () {
   const handleEditSubmit = async (e, _id) => {
     e.preventDefault();
     if(!editName.trim() || !editDate.trim()) {
-      alert('Please fill in both the name and the date fields!');
+      toast.error('Please fill in both the name and the date fields!');
       return;
     }
     try{
       await editBirthday(_id, editName, editDate);
+      toast.success('Birthday updated successfully');
       setEditingBirthday(null);
       fetchBirthdays();
     }catch (error) {
       console.error('Error editing birthday:', error);
-      alert('Failed to update the birthday. Please try again')
+      toast.error('Failed to update the birthday. Please try again')
     }
-  }
+  };
   
   // Delete birthday
   const handleDelete = async (_id) => {
@@ -47,10 +49,11 @@ function Home () {
     if(!confirmDelete) return;
     try{
       await deleteBirthday(_id);
+      toast.success('Birthday deleted successfully!');
       setBirthdays(birthdays.filter(b => b._id !== _id));
     }catch (error) {
       console.error('Error deleting birthday:', error);
-      alert('Failed to delete the birthday. Please try again');
+      toast.error('Failed to delete the birthday. Please try again');
     }
   };
 

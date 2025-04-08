@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Home from "./components/Home";
 import Addbirthday from "./components/Addbirthday";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API_URL = "http://localhost:5000/api/birthdays"; // Your backend endpoint
 
@@ -100,12 +102,16 @@ function App () {
   };
 
   return (
+    <>
+    <ToastContainer position="top-center" />
+
     <Router>
       <Routes>
         <Route path='/' element={<Home birthdays={birthdays} editBirthday={editBirthday} deleteBirthday={deleteBirthday}/>} />
         <Route path='/add' element={<Addbirthday addBirthday={addBirthday}/>} />
       </Routes>
     </Router>
+    </>
   );
 };
 
