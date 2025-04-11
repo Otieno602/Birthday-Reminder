@@ -192,3 +192,5 @@ function Home() {
 }
 
 export default Home;
+
+// mongodb+srv://ronaldotieno237:r0n@ldo001@cluster0.dyuftc5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
