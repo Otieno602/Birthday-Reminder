@@ -4,6 +4,7 @@ const API = axios.create({
     baseURL: 'http://localhost:5000/api/birthdays',
     headers: {
         'Content-Type': 'application/json',
+        'x-api-key': import.meta.env.VITE_API_KEY
     }
 });
 
