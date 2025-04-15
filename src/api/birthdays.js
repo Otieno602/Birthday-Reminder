@@ -4,8 +4,24 @@ const API = axios.create({
     baseURL: 'http://localhost:5000/api/birthdays',
     headers: {
         'Content-Type': 'application/json',
-        'x-api-key': import.meta.env.VITE_API_KEY
     }
+});
+
+API.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+        config.headers.authorization = `Bearer ${token}`;
+    }
+
+    const apiKey = import.meta.env.VITE_API_KEY;
+
+    if (apiKey) {
+        config.headers['x-api-key'] = apiKey;
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
 });
 
 export const getBirthdays = () => API.get('/');

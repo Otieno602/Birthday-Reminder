@@ -16,7 +16,9 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+const authRoutes = require('./routes/auth');
 const birthdayRoutes = require('./routes/birthdays');
+app.use('/api/auth', authRoutes);
 app.use('/api/birthdays', birthdayRoutes);
 
 // Start server
