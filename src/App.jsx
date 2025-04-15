@@ -5,6 +5,7 @@ import axios from "axios";
 import Home from "./components/Home";
 import Addbirthday from "./components/Addbirthday";
 import Login from "./components/Login";
+import Navbar from "./components/Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -121,6 +122,7 @@ function App() {
       <ToastContainer position="top-center" />
 
       <Router>
+        <Navbar />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route
