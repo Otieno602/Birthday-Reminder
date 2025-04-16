@@ -183,7 +183,7 @@ function Home() {
 
       <Link
         to="/add"
-        className="mt-6 px-5 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition text-sm sm:text-base"
+        className="mt-6 px-5 py-2 bg-blue-700 text-white rounded-lg shadow-md hover:bg-blue-800 transition text-sm sm:text-base"
       >
         Add Birthday
       </Link>
