@@ -1,9 +1,23 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
+
   return (
     <nav className="bg-blue-600 text-white p-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center">
@@ -35,7 +49,6 @@ const Navbar = () => {
           >
             Home
           </NavLink>
-
           <NavLink
             to="/add"
             className={({ isActive }) =>
@@ -47,18 +60,29 @@ const Navbar = () => {
           >
             addBirthday
           </NavLink>
-
-          <NavLink
-            to="/login"
-            className={({ isActive }) =>
-              isActive
-                ? "block mt-2 md:mt-0 text-yellow-300 font-semibold"
-                : "block mt-2 md:mt-0 hover:text-yellow-300"
-            }
-            onClick={() => setIsOpen(false)}
-          >
-            Login
-          </NavLink>
+          {isLoggedIn ? (
+            <button
+              onClick={() => {
+                handleLogout();
+                setIsOpen(false);
+              }}
+              className="block mt-2 md:mt-0 hover:text-yellow-300"
+            >
+              Logout
+            </button>
+          ) : (
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                isActive
+                  ? "block mt-2 md:mt-0 text-yellow-300 font-semibold"
+                  : "block mt-2 md:mt-0 hover:text-yellow-300"
+              }
+              onClick={() => setIsOpen(false)}
+            >
+              Login
+            </NavLink>
+          )}
         </div>
       </div>
     </nav>
