@@ -5,6 +5,7 @@ import axios from "axios";
 import Home from "./components/Home";
 import Addbirthday from "./components/Addbirthday";
 import Login from "./components/Login";
+import Registration from "./components/Registration";
 import Navbar from "./components/Navbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -124,6 +125,7 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
+          <Route path="/registration" element={<Registration />} />
           <Route path="/login" element={<Login />} />
           <Route
             path="/"

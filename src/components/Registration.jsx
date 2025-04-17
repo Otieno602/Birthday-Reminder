@@ -4,9 +4,10 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const Login = () => {
+const Registration = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
   });
@@ -23,30 +24,46 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        "http://localhost:5000/api/auth/registration",
         formData
       );
       const { token } = response.data;
       localStorage.setItem("token", token);
-      toast.success("Login successful!");
+      toast.success("Registration successful");
       navigate("/");
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Login failed. Check credentials."
+        error.response?.data?.message ||
+          "Registration failed. Please try again."
       );
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 to-indigo-600 p-4">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-700">
-          Welcome Back!
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-sm">
+        <h2 className="text-2xl font-bold text-center mb-6 text-gray-700">
+          Create Account
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block mb-1 font-semibold text-gray-600">
-              Email:
+              Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="Enter Name"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 font-semibold text-gray-600">
+              Email
             </label>
             <input
               type="email"
@@ -58,9 +75,10 @@ const Login = () => {
               placeholder="you@example.com"
             />
           </div>
+
           <div>
             <label className="block mb-1 font-semibold text-gray-600">
-              Password:
+              Password
             </label>
             <input
               type="password"
@@ -72,18 +90,19 @@ const Login = () => {
               placeholder="**********"
             />
           </div>
+
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition duration-200"
           >
-            Log In
+            Register
           </button>
         </form>
 
         <p className="text-center text-gray-500 mt-4 text-sm">
-          Don't have an account?{" "}
-          <a href="/registration" className="text-blue-500 hover:underline">
-            Register
+          Already have an account?{" "}
+          <a href="/login" className="text-blue-500 hover:underline">
+            Login
           </a>
         </p>
       </div>
@@ -91,4 +110,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Registration;
