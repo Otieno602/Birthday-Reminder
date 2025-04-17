@@ -27,10 +27,8 @@ const Registration = () => {
         "http://localhost:5000/api/auth/registration",
         formData
       );
-      const { token } = response.data;
-      localStorage.setItem("token", token);
-      toast.success("Registration successful");
-      navigate("/");
+      toast.success("Registration successful! Please login");
+      navigate("/login");
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
