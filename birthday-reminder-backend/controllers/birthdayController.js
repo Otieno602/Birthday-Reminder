@@ -3,7 +3,7 @@ const Birthday = require('../models/Birthday');
 // Get all birthdays
 const getBirthdays = async (req, res) => {
     try {
-        const birthdays = await Birthday.find();
+        const birthdays = await Birthday.find({ user: req.user._id }).sort({ date: 1 });
         res.json(birthdays);
     } catch (error) {
         res.status(500).json({ message: 'Failed to fetch birthdays' });
@@ -18,13 +18,12 @@ const addBirthday = async (req, res) => {
         return res.status(400).json({ message: 'Name and date are required.' });
     }
     try {
-        const newBirthday = new Birthday({ name, date });
+        const newBirthday = new Birthday({ name, date, user: req.user._id });
         await newBirthday.save();
-        console.log('Received birthday:', req.body);
-        console.log('Creating new birthday:', newBirthday);
         res.status(201).json(newBirthday);
     } catch (error) {
-        res.status(400).json({ message: 'Failed to add birthday' });
+        console.error('Error adding birthday:', error);
+        res.status(500).json({ message: 'Failed to add birthday' });
     }
 };
 
@@ -32,10 +31,20 @@ const addBirthday = async (req, res) => {
 const updateBirthday = async (req, res) => {
     try {
         const { _id } = req.params;
-        const updated = await Birthday.findByIdAndUpdate(_id, req.body, { new: true });
-        res.json(updated);
+        const birthday = await Birthday.findOne({ _id, user: req.user._id });
+
+        if(!birthday) {
+            return res.status(404).json({ message: 'Birthday not found or not authorised' });
+        }
+
+        birthday.name = req.body.name || birthday.name;
+        birthday.date = req.body.date || birthday.date;
+
+        const updatedBirthday = await birthday.save();
+        res.json(updatedBirthday);
     } catch (error) {
-        res.status(400).json({ message: 'Failed to update birthday' });
+        console.error('Error updating birthday:', error);
+        res.status(500).json({ message: 'Failed to update birthday' });
     }
 };
 
@@ -43,9 +52,15 @@ const updateBirthday = async (req, res) => {
 const deleteBirthday = async (req, res) => {
     try{
         const { _id } = req.params;
-        await Birthday.findByIdAndDelete(_id);
-        res.json({ message: 'Birthday deleted' });        
+        const birthday = await Birthday.findOneAndDelete({ _id, user: req.user._id });
+
+        if (!birthday) {
+            return res.status(404).json({ message: 'Birthday not found or not authorised' });
+        }
+
+        res.json({ message: 'Birthday deleted successfuly' });        
     } catch (error) {
+        console.error('Error deleting birthday:', error);
         res.status(400).json({ message: 'Failed to delete birthday' });
     }
 };

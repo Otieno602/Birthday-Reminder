@@ -1,15 +1,18 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import AuthContext from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -20,6 +23,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -27,13 +31,15 @@ const Login = () => {
         formData
       );
       const { token } = response.data;
-      localStorage.setItem("token", token);
+      login(token);
       toast.success("Login successful!");
       navigate("/");
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Login failed. Check credentials."
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,9 +80,10 @@ const Login = () => {
           </div>
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition duration-200"
           >
-            Log In
+            {loading ? "Logging in ..." : "Log In"}
           </button>
         </form>
 

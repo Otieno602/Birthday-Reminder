@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Home from "./components/Home";
@@ -122,27 +122,25 @@ function App() {
     <>
       <ToastContainer position="top-center" />
 
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/registration" element={<Registration />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <Home
-                birthdays={birthdays}
-                editBirthday={editBirthday}
-                deleteBirthday={deleteBirthday}
-              />
-            }
-          />
-          <Route
-            path="/add"
-            element={<Addbirthday addBirthday={addBirthday} />}
-          />
-        </Routes>
-      </Router>
+      <Navbar />
+      <Routes>
+        <Route path="/registration" element={<Registration />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            <Home
+              birthdays={birthdays}
+              editBirthday={editBirthday}
+              deleteBirthday={deleteBirthday}
+            />
+          }
+        />
+        <Route
+          path="/add"
+          element={<Addbirthday addBirthday={addBirthday} />}
+        />
+      </Routes>
     </>
   );
 }
