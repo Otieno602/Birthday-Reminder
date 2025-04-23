@@ -30,7 +30,9 @@ const Login = () => {
         "http://localhost:5000/api/auth/login",
         formData
       );
-      const { token } = response.data;
+      const { token, user } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
       login(token);
       toast.success("Login successful!");
       navigate("/");
