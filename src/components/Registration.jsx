@@ -12,6 +12,8 @@ const Registration = () => {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -21,6 +23,7 @@ const Registration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await axios.post(
@@ -34,6 +37,8 @@ const Registration = () => {
         error.response?.data?.message ||
           "Registration failed. Please try again."
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,9 +96,12 @@ const Registration = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded transition duration-200"
+            disabled={loading}
+            className={`w-full py-2 px-4 rounded bg-blue-600 text-white font-semibold transition duration-200 ${
+              loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+            }`}
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
 
