@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useContext } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AuthContext from "../context/AuthContext";
 
@@ -80,6 +80,14 @@ const Login = () => {
               placeholder="**********"
             />
           </div>
+
+          <NavLink
+            to="/recallPassword"
+            className="text-blue-500 hover:underline text-sm"
+          >
+            Forgot Password?
+          </NavLink>
+
           <button
             type="submit"
             disabled={loading}

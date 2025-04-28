@@ -29,7 +29,7 @@ function Home() {
         const parsedUser = JSON.parse(storedUser);
         setUserName(parsedUser.name);
       } catch (error) {
-        console.error("Failed to parse stored user:", error);
+        console.error("Error parsing user from local storage:", error);
       }
     }
   }, []);
@@ -39,7 +39,13 @@ function Home() {
       const res = await getBirthdays();
       setBirthdays(res.data);
     } catch (err) {
-      console.error("Error fetching birthdays:", err);
+      if (err.response && err.response.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/login");
+      } else {
+        console.error("Error fetching birthdays:", err);
+      }
     } finally {
       setLoading(false);
     }

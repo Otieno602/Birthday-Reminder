@@ -7,6 +7,8 @@ import Addbirthday from "./components/Addbirthday";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
 import Navbar from "./components/Navbar";
+import RecallPassword from "./components/RecallPassword";
+import ResetPassword from "./components/ResetPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -140,6 +142,8 @@ function App() {
           path="/add"
           element={<Addbirthday addBirthday={addBirthday} />}
         />
+        <Route path="/recallPassword" element={<RecallPassword />} />
+        <Route path="/resetPassword/:token" element={<ResetPassword />} />
       </Routes>
     </>
   );
