@@ -23,6 +23,18 @@ const userSchema = new mongoose.Schema({
     resetTokenExpiry: {
         type: Date,
         default: null
+    },
+    lastMonthlyReminder: {
+        type: Date,
+        default: null,
+    },
+    lastThreeDayReminder: {
+        type: Date,
+        default: null,
+    },
+    lastSameDayReminder: {
+        type: Date,
+        default: null,
     }
 });
 

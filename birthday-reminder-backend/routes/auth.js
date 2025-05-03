@@ -1,5 +1,6 @@
 const express = require('express');
 const { registration, login, recallPassword, verifyResetToken, resetPassword } = require('../controllers/authController');
+const sendEmail = require('../utils/sendEmail');
 const router = express.Router();
 
 router.post('/registration', registration);

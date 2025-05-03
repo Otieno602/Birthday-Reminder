@@ -12,7 +12,7 @@ import ResetPassword from "./components/ResetPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const API_URL = "http://localhost:5000/api/birthdays"; // Your backend endpoint
+const API_URL = "http://localhost:5000/api/birthdays";
 
 function App() {
   const [birthdays, setBirthdays] = useState([]);
@@ -28,63 +28,6 @@ function App() {
   useEffect(() => {
     fetchBirthdays();
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("birthdays", JSON.stringify(birthdays));
-  }, [birthdays]);
-
-  useEffect(() => {
-    if (Notification.permission === "default") {
-      Notification.requestPermission();
-    }
-  }, []);
-
-  const sendNotification = (title, message) => {
-    if (Notification.permission === "granted") {
-      new Notification(title, {
-        body: message,
-        icon: "",
-        requireInteraction: true,
-      });
-    }
-  };
-
-  useEffect(() => {
-    const today = new Date();
-    birthdays.forEach((bday) => {
-      const birthdayDate = new Date(bday.date);
-      birthdayDate.setFullYear(today.getFullYear());
-      const differenceInDays = Math.ceil(
-        (birthdayDate - today) / (1000 * 60 * 60 * 24)
-      );
-
-      if (differenceInDays === 3) {
-        sendNotification(
-          "Birthday Reminder!",
-          `${bday.name}'s birthday is in 3 days`
-        );
-      }
-    });
-  }, [birthdays]);
-
-  useEffect(() => {
-    const today = new Date();
-
-    if (today.getDate() === 1) {
-      const thisMonth = today.getMonth();
-      const birthdaysThisMonth = birthdays.filter((bday) => {
-        const birthdayDate = new Date(bday.date);
-        return !isNaN(birthdayDate) && birthdayDate.getMonth() === thisMonth;
-      });
-
-      if (birthdaysThisMonth.length > 0) {
-        sendNotification(
-          "Monthly Birthday Reminder!",
-          `You have ${birthdaysThisMonth.length} birthdays this month. Ensure you have sent your token to avoid penalty.`
-        );
-      }
-    }
-  }, [birthdays]);
 
   const addBirthday = async (name, date) => {
     try {
@@ -123,7 +66,6 @@ function App() {
   return (
     <>
       <ToastContainer position="top-center" />
-
       <Navbar />
       <Routes>
         <Route path="/registration" element={<Registration />} />
