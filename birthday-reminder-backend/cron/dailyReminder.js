@@ -3,7 +3,7 @@ const sendEmail = require('../utils/sendEmail');
 const Birthday = require('../models/Birthday');
 const User = require('../models/user');
 
-cron.schedule('0 6 * * *', async () => {
+cron.schedule(process.env.CRON_SAMEDAY, async () => {
     console.log('📬 Running same-day birthday reminder');
 
     const now = new Date();
@@ -62,4 +62,6 @@ cron.schedule('0 6 * * *', async () => {
     } catch (err) {
         console.log('❌ Error sending same-day reminders:', err);
     }
+}, {
+    timezone: 'Africa/Nairobi'
 });

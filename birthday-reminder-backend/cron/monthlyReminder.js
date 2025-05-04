@@ -3,7 +3,7 @@ const sendEmail = require('../utils/sendEmail');
 const Birthday = require('../models/Birthday');
 const User = require('../models/user');
 
-cron.schedule('0 6 1 * *',  async () => {
+cron.schedule(process.env.CRON_MONTHLY,  async () => {
     console.log('📬 Running monthly birthday reminder...');
 
     const now = new Date();
@@ -54,5 +54,7 @@ cron.schedule('0 6 1 * *',  async () => {
     } catch (err) {
         console.error('❌ Error fetching users:', err);
     }
+}, {
+   timezone: 'Africa/Nairobi' 
 });
 
