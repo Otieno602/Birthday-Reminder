@@ -7,11 +7,6 @@ cron.schedule(process.env.CRON_SAMEDAY, async () => {
     console.log('📬 Running same-day birthday reminder');
 
     const now = new Date();
-    const startOfToday = new Date(now);
-    startOfToday.setHours(0, 0, 0, 0);
-
-    const endOfToday = new Date(now);
-    endOfToday.setHours(23, 59, 59, 999);
 
     try {
         const users = await User.find({});
@@ -32,10 +27,12 @@ cron.schedule(process.env.CRON_SAMEDAY, async () => {
 
                 const birthdays = await Birthday.find({
                     user: user._id,
-                    date: {
-                        $gte: startOfToday,
-                        $lte: endOfToday,
-                    },
+                    $expr: {
+                        $and: [
+                            { $eq: [{ $dayOfMonth: '$date'}, now.getDate()] },
+                            { $eq: [{ $month: '$date'}, now.getMonth() + 1] }
+                        ]
+                    }
                 });
 
                 if (birthdays.length > 0) {

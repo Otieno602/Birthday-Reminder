@@ -7,14 +7,8 @@ cron3Day.schedule(process.env.CRON_3DAY, async () => {
     console.log('📬 Running 3-day birthday reminder');
 
     const now = new Date();
-    const threeDaysLater = new Date(now);
+    const threeDaysLater = new Date();
     threeDaysLater.setDate(now.getDate() + 3);
-
-    const startOfTarget = new Date(threeDaysLater);
-    startOfTarget.setHours(0, 0, 0, 0);
-
-    const endOfTarget = new Date(threeDaysLater);
-    endOfTarget.setHours(23, 59, 59, 999);
 
     try {
         const users = await User.find({});
@@ -35,10 +29,12 @@ cron3Day.schedule(process.env.CRON_3DAY, async () => {
 
                 const birthdays = await Birthday.find({
                     user: user._id,
-                    date: {
-                        $gte: startOfTarget,
-                        $lte: endOfTarget
-                    },
+                    $expr: {
+                        $and: [
+                            { $eq: [{ $dayOfMonth: '$date'}, threeDaysLater.getDate()] },
+                            { $eq: [{ $month: '$date'}, threeDaysLater.getMonth() + 1] }
+                        ]
+                    }
                 });
 
                 if (birthdays.length > 0) {
