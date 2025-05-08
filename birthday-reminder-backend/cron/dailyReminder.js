@@ -1,7 +1,9 @@
+
 const cron = require('node-cron');
 const sendEmail = require('../utils/sendEmail');
 const Birthday = require('../models/Birthday');
 const User = require('../models/user');
+const ReminderLog = require('../models/ReminderLog');
 
 cron.schedule(process.env.CRON_SAMEDAY, async () => {
     console.log('📬 Running same-day birthday reminder');
@@ -45,6 +47,15 @@ cron.schedule(process.env.CRON_SAMEDAY, async () => {
                         `🎂 Birthdays Today!`,
                         `Here are today's birthdays:\n\n${birthdayList}`
                     );
+
+                    for (const b of birthdays) {
+                        await ReminderLog.create({
+                            email: user.email,
+                            type: 'monthly',
+                            birthdayName: b.name,
+                            birthdayDate: b.date
+                        });
+                    }
 
                     user.lastSameDayReminder = new Date();
                     await user.save();
