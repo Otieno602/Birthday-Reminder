@@ -1,9 +1,7 @@
-
 const cron = require('node-cron');
 const sendEmail = require('../utils/sendEmail');
 const Birthday = require('../models/Birthday');
 const User = require('../models/user');
-const ReminderLog = require('../models/ReminderLog');
 
 cron.schedule(process.env.CRON_MONTHLY,  async () => {
     console.log('📬 Running monthly birthday reminder...');
@@ -44,14 +42,6 @@ cron.schedule(process.env.CRON_MONTHLY,  async () => {
                         `Here are the birthdays for this month:\n\n${birthdayList}`
                     );
 
-                    for (const b of birthdays) {
-                        await ReminderLog.create({
-                            email: user.email,
-                            type: 'monthly',
-                            birthdayName: b.name,
-                            birthdayDate: b.date
-                        });
-                    }
 
                     user.lastMonthlyReminder = new Date();
                     await user.save();

@@ -1,9 +1,7 @@
-
 const cron3Day = require('node-cron');
 const sendEmail = require('../utils/sendEmail');
 const Birthday = require('../models/Birthday');
 const User = require('../models/user');
-const ReminderLog = require('../models/ReminderLog');
 
 cron3Day.schedule(process.env.CRON_3DAY, async () => {
     console.log('📬 Running 3-day birthday reminder');
@@ -47,15 +45,6 @@ cron3Day.schedule(process.env.CRON_3DAY, async () => {
                             `🎉 Upcoming birthday in 3 days`,
                             `These birthdays are in 3 days:\n\n${birthdayList}`
                     );
-
-                    for (const b of birthdays) {
-                        await ReminderLog.create({
-                            email: user.email,
-                            type: 'monthly',
-                            birthdayName: b.name,
-                            birthdayDate: b.date
-                        });
-                    }
 
                     user.lastThreeDayReminder = new Date();
                     await user.save();

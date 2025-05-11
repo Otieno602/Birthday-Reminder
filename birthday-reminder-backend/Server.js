@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/auth');
 const birthdayRoutes = require('./routes/birthdays');
-const reminderLogRoutes = require('./routes/reminderLogs');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -22,7 +21,6 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/birthdays', birthdayRoutes);
-app.use('/api/reminderLogs', reminderLogRoutes);
 
 // Cron Jobs
 require('./cron/monthlyReminder');
