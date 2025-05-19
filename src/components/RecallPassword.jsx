@@ -14,11 +14,16 @@ const RecallPassword = () => {
     setLoading(true);
 
     try {
-      await axios.post(`${API_URL}/api/auth/recallPassword`, email, {
-        headers: {
-          "x-api-key": API_KEY,
-        },
-      });
+      console.log("Sending email to backend:", email);
+      await axios.post(
+        `${API_URL}/api/auth/recallPassword`,
+        { email },
+        {
+          headers: {
+            "x-api-key": API_KEY,
+          },
+        }
+      );
       toast.success("If this email exists, a reset link will be sent.");
     } catch (error) {
       toast.error("Something went wrong. Try again later.");
