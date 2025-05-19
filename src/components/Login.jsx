@@ -5,6 +5,9 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import AuthContext from "../context/AuthContext";
 
+const API_URL = import.meta.env.VITE_API_URL;
+const API_KEY = import.meta.env.VITE_API_KEY;
+
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
@@ -26,10 +29,11 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/login",
-        formData
-      );
+      const response = await axios.post(`${API_URL}/api/auth/login`, formData, {
+        headers: {
+          "x-api-key": API_KEY,
+        },
+      });
       const { token, user } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+const API_URL = import.meta.env.VITE_API_URL;
+const API_KEY = import.meta.env.VITE_API_KEY;
+
 const RecallPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -11,8 +14,10 @@ const RecallPassword = () => {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:5000/api/auth/recallPassword", {
-        email,
+      await axios.post(`${API_URL}/api/auth/recallPassword`, email, {
+        headers: {
+          "x-api-key": API_KEY,
+        },
       });
       toast.success("If this email exists, a reset link will be sent.");
     } catch (error) {

@@ -1,8 +1,11 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+const API_URL = import.meta.env.VITE_API_URL;
+const API_KEY = import.meta.env.VITE_API_KEY;
+
 const API = axios.create({
-    baseURL: 'http://localhost:5000/api/birthdays',
+    baseURL: `${API_URL}/api/birthdays`,
     headers: {
         'Content-Type': 'application/json',
     }
@@ -16,12 +19,10 @@ API.interceptors.request.use((config) => {
         config.headers.authorization = `Bearer ${token}`;
     }
 
-    const apiKey = import.meta.env.VITE_API_KEY;
-
-    if (apiKey) {
-        config.headers['x-api-key'] = apiKey;
+    if (API_KEY) {
+        config.headers['x-api-key'] = API_KEY;
     }
-    return config;
+    return config
 }, (error) => {
     return Promise.reject(error);
 });

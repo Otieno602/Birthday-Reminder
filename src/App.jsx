@@ -12,13 +12,19 @@ import ResetPassword from "./components/ResetPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const API_URL = "http://localhost:5000/api/birthdays";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/birthdays`;
 
 function App() {
   const [birthdays, setBirthdays] = useState([]);
   const fetchBirthdays = async () => {
     try {
-      const response = await axios.get(API_URL);
+      const token = localStorage.getItem('token');
+      const response = await axios.get(API_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'x-api-key': import.meta.env.VITE_API_KEY,
+        },
+      });
       console.log("Fetched Birthdays:", response.data);
       setBirthdays(response.data);
     } catch (error) {
@@ -31,7 +37,13 @@ function App() {
 
   const addBirthday = async (name, date) => {
     try {
-      const response = await axios.post(API_URL, { name, date });
+      const token = localStorage.getItem('token');
+      const response = await axios.post(API_URL, { name, date }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'x-api-key': import.meta.env.VITE_API_KEY,
+        },
+      });
       setBirthdays([
         ...birthdays,
         { ...response.data, _id: response.data._id },
@@ -43,7 +55,14 @@ function App() {
 
   const editBirthday = async (_id, name, date) => {
     try {
-      const response = await axios.put(`${API_URL}/${_id}`, { name, date });
+      const token = localStorage.getItem('token');
+      const response = await axios.put(`${API_URL}/${_id}`,
+         { name, date }, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'x-api-key': import.meta.env.VITE_API_KEY,
+            },
+         });
       setBirthdays(
         birthdays.map((b) =>
           b._id === _id ? { ...response.data, _id: response.data._id } : b
@@ -56,7 +75,13 @@ function App() {
 
   const deleteBirthday = async (_id) => {
     try {
-      await axios.delete(`${API_URL}/${_id}`);
+      const token = localStorage.getItem('token');
+      await axios.delete(`${API_URL}/${_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'x-api-key': import.meta.env.VITE_API_KEY,
+        },
+      });
       setBirthdays(birthdays.filter((b) => b._id !== _id));
     } catch (error) {
       console.error("Error deleting birthday", error);

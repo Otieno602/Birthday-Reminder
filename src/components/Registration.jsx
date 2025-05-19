@@ -4,6 +4,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+const API_URL = import.meta.env.VITE_API_URL;
+const API_KEY = import.meta.env.VITE_API_KEY;
+
 const Registration = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -27,8 +30,13 @@ const Registration = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/registration",
-        formData
+        `${API_URL}/api/auth/registration`,
+        formData,
+        {
+          headers: {
+            "x-api-key": API_KEY,
+          },
+        }
       );
       toast.success("Registration successful! Please login");
       navigate("/login");
